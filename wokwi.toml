@@ -1,0 +1,4 @@
+[wokwi]
+version = 1
+firmware = 'build/BitDogLab_UART_I2C_Explorer.uf2'
+elf = 'build/BitDogLab_UART_I2C_Explorer.elf'
