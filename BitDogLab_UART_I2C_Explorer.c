@@ -57,9 +57,12 @@ void gpio_irq_handler(uint gpio, uint32_t events) {
 // Inicializa UART
 void init_uart(void) {
     stdio_init_all();
+    sleep_ms(100); // Aguarda 100ms para inicialização da UART
     uart_init(UART_ID, BAUD_RATE);
     gpio_set_function(UART_TX_PIN, GPIO_FUNC_UART);
     gpio_set_function(UART_RX_PIN, GPIO_FUNC_UART);
+
+    printf("UART inicializada. Baud Rate: %d\n", BAUD_RATE);
 }
 
 // Inicializa GPIOs
