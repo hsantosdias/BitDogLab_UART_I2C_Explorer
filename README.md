@@ -22,35 +22,37 @@ O projeto implementa:
   * **Números (0-9):** São exibidos na  **matriz de LEDs WS2812** .
   * **Letras (A-Z, a-z):** São exibidas no **OLED** e desligam a matriz.
 
+## .
+
 ## Bibliotecas Utilizadas
 
-### Pico SDK
+### **1. Pico SDK**
 
-O **Pico SDK** fornece suporte para a programação no RP2040, incluindo  **GPIO, UART, I2C e PIO** , permitindo a comunicação com periféricos.
+O **Pico SDK** fornece suporte para a programação no RP2040, incluindo **GPIO, UART, I2C e PIO**, permitindo a comunicação com periféricos. O projeto usa a versão **2.1.0** do SDK.
 
-### hardware/i2c.h
+### **2. hardware/i2c.h**
 
-Utilizada para comunicação via **I2C** com o display  **SSD1306** , permitindo a troca de dados entre o microcontrolador e dispositivos I2C.
+Utilizada para comunicação via **I2C** com o display **SSD1306**, permitindo a troca de dados entre o microcontrolador e dispositivos I2C.
 
-### hardware/irq.h
+### **3. hardware/irq.h**
 
-Gerencia  **interrupções de hardware** , permitindo detectar eventos como o acionamento de botões sem bloquear a execução principal do código.
+Gerencia **interrupções de hardware**, permitindo detectar eventos como o acionamento de botões sem bloquear a execução principal do código.
 
-### hardware/uart.h
+### **4. hardware/uart.h**
 
-Implementa a  **comunicação UART** , permitindo a entrada e saída de dados entre o RP2040 e um terminal serial.
+Implementa a **comunicação UART**, permitindo a entrada e saída de dados entre o RP2040 e um terminal serial.
 
-### led_matrix.h
+### **5. led_matrix.h**
 
-Biblioteca personalizada para controle da  **matriz de LEDs WS2812** , permitindo a exibição de números na matriz.
+Biblioteca personalizada para controle da **matriz de LEDs WS2812**, permitindo a exibição de números na matriz.
 
-### ssd1306.h
+### **6. ssd1306.h**
 
-Biblioteca para o  **display OLED SSD1306** , permitindo exibir caracteres e gráficos básicos via  **I2C** .
+Biblioteca para o **display OLED SSD1306**, permitindo exibir caracteres e gráficos básicos via **I2C**.
 
-### font.h
+### **7. font.h**
 
-Define fontes de caracteres usadas no  **display SSD1306** , incluindo suporte para  **letras minúsculas e maiúsculas** .
+Define fontes de caracteres usadas no **display SSD1306**, incluindo suporte para **letras minúsculas e maiúsculas**.
 
 ## Estrutura do Projeto
 
@@ -70,6 +72,10 @@ BitDogLab_UART_I2C_Explorer  # Nome do programa principal
 ├── diagram.json             # Fluxograma do projeto
 ├── README.md                # Introdução e documentação do projeto
 ```
+
+## Configuração do Ambiente de Desenvolvimento
+
+O projeto utiliza o **Pico SDK 2.1.0**, o **CMake 3.29.9**, o **Ninja 1.12.1** e a ferramenta **arm-none-eabi-gcc 13_3_Rel1** para compilação. O ambiente pode ser configurado conforme as instruções abaixo.
 
 ## Dificuldades Encontradas
 
@@ -108,7 +114,6 @@ Este fluxograma ilustra as principais etapas do código, incluindo inicializaç�
 **Fluxograma completo do projeto**
 
 [![Flugrama de interações entre as funções](imgs/fluxograma-completo.png "Flugrama de interações entre as funções")](https://github.com/hsantosdias/BitDogLab_UART_I2C_Explorer/blob/main/imgs/fluxograma-completo.png?raw=true "Flugrama de interações entre as funções")
-
 
 ### Descrição Simplificada do Fluxograma
 
