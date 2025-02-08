@@ -53,13 +53,13 @@ void gpio_irq_handler(uint gpio, uint32_t events) {
             estado_led_verde = !estado_led_verde;
             gpio_put(LED_PIN_G, estado_led_verde);
             printf("Botão A pressionado: LED Verde %s\n", estado_led_verde ? "Ligado" : "Desligado");
-            atualizar_display(estado_led_verde ? "LED Verde Ligado" : "LED Verde Desligado", "");
+            atualizar_display(estado_led_verde ? "LED Verde ON" : "LED Verde off", "");
         } 
         else if (gpio == BUTTON_PIN_B) {
             estado_led_azul = !estado_led_azul;
             gpio_put(LED_PIN_B, estado_led_azul);
             printf("Botão B pressionado: LED Azul %s\n", estado_led_azul ? "Ligado" : "Desligado");
-            atualizar_display(estado_led_azul ? "LED Azul Ligado" : "LED Azul Desligado", "");
+            atualizar_display(estado_led_azul ? "LED Azul ON" : "LED Azul off", "");
         }
     }
 }
