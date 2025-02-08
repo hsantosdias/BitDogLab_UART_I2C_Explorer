@@ -1,47 +1,56 @@
 # BitDogLab_UART_I2C_Explorer
 
-Projeto para explorar a comunicação UART e I2C com o RP2040 na placa BitDogLab.
+Projeto para explorar a comunicação **UART** e **I2C** no RP2040 usando a placa  **BitDogLab** .
 
-Inclui controle de LEDs RGB, matriz WS2812, botões com interrupções e debounce, além da exibição de caracteres no display SSD1306.
+O projeto implementa:
 
-## Funcionalidades
+* Controle de LEDs RGB e matriz de LEDs WS2812.
+* Exibição de caracteres no display **SSD1306** via  **I2C** .
+* Uso de botões físicos com **interrupções** e **debounce** para interação.
+* Entrada de dados via **UART** com interpretação de caracteres.
+* **Desligamento automático da matriz** de LEDs após entrada de letras.
 
-* Comunicação UART com entrada de caracteres via Serial Monitor.
-* Exibição de caracteres no display SSD1306 via I2C.
-* Controle de LEDs RGB com botões físicos e interrupções.
-* Suporte a LEDs WS2812 para exibição de números em matriz 5x5.
-* Capacidade de desligamento automático da matriz após inatividade.
-* Comandos UART para limpar a tela e desligar o sistema.
+## Funcionalidades Implementadas
+
+* **Comunicação UART:** Entrada de caracteres via  **Serial Monitor** .
+* **Exibição no Display OLED:** Caracteres digitados são exibidos no  **SSD1306** .
+* **Controle de LEDs RGB:** LEDs Verde e Azul são alternados com os botões físicos.
+* **Matriz de LEDs WS2812:** Exibe números de 0 a 9 quando digitados.
+* **Desligamento automático da matriz:** A matriz  **desliga ao receber uma letra** .
+* **Tratamento de botões:** Uso de **interrupções (IRQ) e debounce** para evitar falsos acionamentos.
+* **Comandos via UART:**
+  * **Números (0-9):** São exibidos na  **matriz de LEDs WS2812** .
+  * **Letras (A-Z, a-z):** São exibidas no **OLED** e desligam a matriz.
 
 ## Bibliotecas Utilizadas
 
-### **1. Pico SDK**
+### Pico SDK
 
-O **Pico SDK** fornece a base para a programação no RP2040, incluindo suporte para  **GPIO, UART, I2C e PIO** . É essencial para comunicação com periféricos e controle de hardware da placa.
+O **Pico SDK** fornece suporte para a programação no RP2040, incluindo  **GPIO, UART, I2C e PIO** , permitindo a comunicação com periféricos.
 
-### **2. hardware/i2c.h**
+### hardware/i2c.h
 
-Utilizada para comunicação via **I2C** com o display SSD1306. Permite a troca de dados entre o microcontrolador e dispositivos I2C externos, como sensores e displays.
+Utilizada para comunicação via **I2C** com o display  **SSD1306** , permitindo a troca de dados entre o microcontrolador e dispositivos I2C.
 
-### **3. hardware/irq.h**
+### hardware/irq.h
 
-Gerencia  **interrupções de hardware** , usadas para detectar eventos como o pressionamento de botões e realizar ações imediatas sem bloquear o código principal.
+Gerencia  **interrupções de hardware** , permitindo detectar eventos como o acionamento de botões sem bloquear a execução principal do código.
 
-### **4. hardware/uart.h**
+### hardware/uart.h
 
-Utilizada para comunicação **UART** entre o RP2040 e o terminal serial, permitindo envio e recepção de dados.
+Implementa a  **comunicação UART** , permitindo a entrada e saída de dados entre o RP2040 e um terminal serial.
 
-### **5. led_matrix.h**
+### led_matrix.h
 
-Biblioteca personalizada para controle da  **matriz de LEDs WS2812** . Permite a exibição de números na matriz com controle individual de cada LED RGB.
+Biblioteca personalizada para controle da  **matriz de LEDs WS2812** , permitindo a exibição de números na matriz.
 
-### **6. ssd1306.h**
+### ssd1306.h
 
-Biblioteca para manipular o **display OLED SSD1306** via  **I2C** . Permite exibir caracteres e gráficos básicos no display.
+Biblioteca para o  **display OLED SSD1306** , permitindo exibir caracteres e gráficos básicos via  **I2C** .
 
-### **7. font.h**
+### font.h
 
-Define fontes de caracteres usadas no display SSD1306.
+Define fontes de caracteres usadas no  **display SSD1306** , incluindo suporte para  **letras minúsculas e maiúsculas** .
 
 ## Estrutura do Projeto
 
@@ -73,10 +82,10 @@ Durante o desenvolvimento, alguns desafios surgiram e foram superados:
 
 ## Comandos Especiais via UART
 
-O sistema aceita alguns comandos especiais enviados pelo terminal UART:
+O sistema reconhece os seguintes comandos enviados via  **Serial Monitor** :
 
-* **Digitar um número (`0-9`)** : Exibe o número na matriz 5x5 de LEDs WS2812.
-* **Digitar uma letra (`A-Z` ou `a-z`)** : Exibe a letra no display OLED e desliga a matriz de LEDs.
+* **Números (0-9):** Exibidos na  **matriz de LEDs WS2812** .
+* **Letras (A-Z ou a-z):** Exibidas no **display OLED** e desligam a matriz de LEDs.
 
 ## Configuração
 
@@ -88,36 +97,38 @@ O sistema aceita alguns comandos especiais enviados pelo terminal UART:
 
 ## Fluxograma
 
-O fluxograma abaixo representa o funcionamento do código principal:
+O fluxograma abaixo representa o funcionamento geral do código principal.
 
-**Fluxograma simplificado do projeto**
-
+**Fluxograma do projeto**
 
 [![Fluxograma Simplificado](imgs/fluxograma-simplificado.png "Fluxograma Simplificado")](https://github.com/hsantosdias/BitDogLab_UART_I2C_Explorer/blob/main/imgs/fluxograma-simplificado.png?raw=true "Fluxograma Simplificado")
 
-*Este fluxograma mostra a estrutura básica do código principal, incluindo inicializações e o loop principal de execução.*
+Este fluxograma ilustra as principais etapas do código, incluindo inicializações e o loop principal de execução.
 
 **Fluxograma completo do projeto**
 
 [![Flugrama de interações entre as funções](imgs/fluxograma-completo.png "Flugrama de interações entre as funções")](https://github.com/hsantosdias/BitDogLab_UART_I2C_Explorer/blob/main/imgs/fluxograma-completo.png?raw=true "Flugrama de interações entre as funções")
 
-### **Descrição Simplificada do Fluxograma**
 
-O fluxograma representa o funcionamento do sistema, desde a inicialização até a interação com os componentes.
+### Descrição Simplificada do Fluxograma
 
-1. **Inicialização**
-   * O sistema é ligado e inicializa  **UART** ,  **GPIOs** , **Display OLED** e  **Matriz de LED 5x5** .
+1. **Inicialização do Sistema**
+   * O código inicializa  **UART** ,  **GPIOs** , **Display OLED** e  **Matriz de LED WS2812** .
    * Após a inicialização, entra no  **loop principal** .
-2. **Entrada via UART (Teclado do PC)**
-   * Se houver entrada via  **UART** , o sistema processa o caractere digitado.
-   * Se for uma  **letra** , ela é exibida no **OLED** e a  **matriz de LED é desligada** .
+2. **Entrada via UART**
+   * Se houver entrada de um caractere pelo  **Serial Monitor** , o sistema o processa.
+   * Se for uma  **letra** , ela é exibida no **display OLED** e  **desliga a matriz de LED** .
    * Se for um  **número (0-9)** , ele é exibido na  **matriz de LED** .
-3. **Interação com os Botões**
+3. **Interação com Botões**
    * Se um botão for pressionado:
-     * **Botão A:** Alterna o estado do **LED Verde** e exibe a mudança no  **OLED** .
-     * **Botão B:** Alterna o estado do **LED Azul** e exibe a mudança no  **OLED** .
+     * **Botão A** : Alterna o estado do **LED Verde** e exibe a mudança no  **OLED** .
+     * **Botão B** : Alterna o estado do **LED Azul** e exibe a mudança no  **OLED** .
    * Se nenhum botão for pressionado, o sistema continua aguardando.
-4. **Ciclo Contínuo**
-   * Após processar  **UART ou Botões** , o sistema espera **50ms** antes de continuar o loop.
+4. **Loop Contínuo**
+   * Após processar uma entrada via **UART** ou um  **botão** , o sistema aguarda **50ms** antes de continuar o loop.
 
-**Resumo:** O sistema lê entradas do teclado (UART) e exibe caracteres no OLED e números na matriz 5x5. Ele também responde aos botões alternando LEDs e exibindo o status no display.
+## Considerações Finais
+
+O projeto integra **diferentes interfaces de comunicação** no  **RP2040** , permitindo explorar **UART, I2C e GPIO** de forma prática. Além disso, a implementação de **interrupções e debounce** aprimora a confiabilidade do sistema.
+
+Este projeto é uma boa referência para quem deseja aprender a combinar **hardware e software** em microcontroladores.
