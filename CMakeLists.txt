@@ -59,6 +59,7 @@ target_include_directories(BitDogLab_UART_I2C_Explorer PRIVATE
 # Add any user requested libraries
 target_link_libraries(BitDogLab_UART_I2C_Explorer 
         hardware_i2c
+        hardware_pio
         )
 
 pico_add_extra_outputs(BitDogLab_UART_I2C_Explorer)

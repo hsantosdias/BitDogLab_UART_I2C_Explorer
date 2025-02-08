@@ -6,6 +6,10 @@
 #include "inc/font.h"
 #include "hardware/irq.h"
 
+
+// Definições de codigo base para matriz de leds
+#include "led_matrix.h"
+
 // Definições do display SSD1306 128x64 I2C OLED 
 #define I2C_PORT i2c1
 #define I2C_SDA 14
