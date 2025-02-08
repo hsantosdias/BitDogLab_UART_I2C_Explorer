@@ -120,28 +120,29 @@ void atualizar_display(const char *mensagem) {
     ssd1306_send_data(&ssd);
 }
 
-if (uart_is_readable(UART_ID)) {
 // Processa entrada via UART
 void processar_uart(void) {
-    if (uart_is_readable(UART_ID)) {
-        char recebido = uart_getc(UART_ID);
-        printf("Recebido via UART: %c\n", recebido);
+    if (stdio_usb_connected()) {  // Certifica-se de que o USB está conectado
+        char recebido;
+        if (scanf("%c", &recebido) == 1) {  // Lê caractere da entrada padrão
+            printf("Recebido via UART: %c\n", recebido);
 
-        // Se for uma letra, exibe no display
-        if ((recebido >= 'A' && recebido <= 'Z') || (recebido >= 'a' && recebido <= 'z')) {
-            char mensagem[20];
-            snprintf(mensagem, sizeof(mensagem), "Letra: %c", recebido);
-            atualizar_display(mensagem);
-            printf("Letra recebida e enviada ao OLED: %c\n", recebido);
-        } 
-        // Se for um número, exibe na matriz de LEDs
-        else if (recebido >= '0' && recebido <= '9') {
-            int numero = recebido - '0';
-            printf("Número recebido via UART: %d\n", numero);
-            led_matrix_display_number(numero);
-            char mensagem[20];
-            snprintf(mensagem, sizeof(mensagem), "Número: %d", numero);
-            atualizar_display(mensagem);
+            // Se for uma letra, exibe no display
+            if ((recebido >= 'A' && recebido <= 'Z') || (recebido >= 'a' && recebido <= 'z')) {
+                char mensagem[20];
+                snprintf(mensagem, sizeof(mensagem), "Letra: %c", recebido);
+                atualizar_display(mensagem);
+                printf("Letra recebida e enviada ao OLED: %c\n", recebido);
+            } 
+            // Se for um número, exibe na matriz de LEDs
+            else if (recebido >= '0' && recebido <= '9') {
+                int numero = recebido - '0';
+                printf("Número recebido via UART: %d\n", numero);
+                led_matrix_display_number(numero);
+                char mensagem[20];
+                snprintf(mensagem, sizeof(mensagem), "Número: %d", numero);
+                atualizar_display(mensagem);
+            }
         }
     }
 }
