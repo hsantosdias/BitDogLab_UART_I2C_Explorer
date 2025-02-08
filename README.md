@@ -13,9 +13,14 @@ Inclui controle de LEDs RGB, matriz WS2812, botões com interrupções e debounc
 ## Estrutura do Projeto
 
 ```plaintext
-BitDogLab_UART_I2C_Explorer
+BitDogLab_UART_I2C_Explorer #Nome do programa principal
+├── inc\                    #Codigo base Professor Wilton Lacerda
+    ├── font.h
+    ├── ssd1306.c
+    ├── ssd1306.h
  ├── main.c        # Código-fonte principal
  ├── README.md     # Introdução e documentação do projeto
+    
 
 ```
 

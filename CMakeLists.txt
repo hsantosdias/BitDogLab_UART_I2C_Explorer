@@ -28,35 +28,35 @@ set(PICO_BOARD pico CACHE STRING "Board type")
 # Pull in Raspberry Pi Pico SDK (must be before project)
 include(pico_sdk_import.cmake)
 
-project(DisplayC C CXX ASM)
+project(BitDogLab_UART_I2C_Explorer C CXX ASM)
 
 # Initialise the Raspberry Pi Pico SDK
 pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
 
-add_executable(DisplayC DisplayC.c inc/ssd1306.c)
+add_executable(BitDogLab_UART_I2C_Explorer BitDogLab_UART_I2C_Explorer.c inc/ssd1306.c)
 
-pico_set_program_name(DisplayC "DisplayC")
-pico_set_program_version(DisplayC "0.1")
+pico_set_program_name(BitDogLab_UART_I2C_Explorer "BitDogLab_UART_I2C_Explorer")
+pico_set_program_version(BitDogLab_UART_I2C_Explorer "0.1")
 
 # Modify the below lines to enable/disable output over UART/USB
-pico_enable_stdio_uart(DisplayC 0)
-pico_enable_stdio_usb(DisplayC 1)
+pico_enable_stdio_uart(BitDogLab_UART_I2C_Explorer 0)
+pico_enable_stdio_usb(BitDogLab_UART_I2C_Explorer 1)
 
 # Add the standard library to the build
-target_link_libraries(DisplayC
+target_link_libraries(BitDogLab_UART_I2C_Explorer
         pico_stdlib)
 
 # Add the standard include files to the build
-target_include_directories(DisplayC PRIVATE
+target_include_directories(BitDogLab_UART_I2C_Explorer PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}
 )
 
 # Add any user requested libraries
-target_link_libraries(DisplayC 
+target_link_libraries(BitDogLab_UART_I2C_Explorer 
         hardware_i2c
         )
 
-pico_add_extra_outputs(DisplayC)
+pico_add_extra_outputs(BitDogLab_UART_I2C_Explorer)
 
