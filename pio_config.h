@@ -3,7 +3,7 @@
 #include "hardware/gpio.h"
 #include "hardware/clocks.h"
 
-#include "ws2818b.pio.h"
+#include "ws2812b.pio.h"
 
 #define LED_COUNT 25
 

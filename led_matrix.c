@@ -19,10 +19,10 @@ void led_matrix_set_pixel(uint index, uint8_t r, uint8_t g, uint8_t b) {
 }
 
 void led_matrix_init(void) {
-    uint offset = pio_add_program(pio0, &ws2818b_program);
+    uint offset = pio_add_program(pio0, &ws2812b_program);
     np_pio = pio0;
     sm = pio_claim_unused_sm(np_pio, true);
-    ws2818b_program_init(np_pio, sm, offset, MATRIX_LED_PIN);
+    ws2812b_program_init(np_pio, sm, offset, MATRIX_LED_PIN);
     led_matrix_clear();
 }
 

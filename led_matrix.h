@@ -10,7 +10,7 @@
 #include "hardware/irq.h"
 #include "hardware/timer.h"
 #include "hardware/sync.h"
-#include "ws2818b.pio.h"
+#include "ws2812b.pio.h"
 
 #define MATRIX_LED_PIN 7
 #define LED_COUNT 25

@@ -53,7 +53,7 @@ BitDogLab_UART_I2C_Explorer  # Nome do programa principal
 ├── led_matrix.h             # Cabeçalho da matriz de LED
 ├── led_matrix.c             # Implementação da matriz de LED
 ├── pio_config.h             # Configuração do PIO para WS2812
-├── ws2818b.pio.h            # Código PIO para LEDs WS2812
+├── ws2812b.pio.h            # Código PIO para LEDs WS2812
 ├── BitDogLab_UART_I2C_Explorer.c  # Código-fonte principal
 ├── pico_sdk_import.cmake    # Configuração do SDK
 ├── CMakeLists.txt           # Configuração do projeto
