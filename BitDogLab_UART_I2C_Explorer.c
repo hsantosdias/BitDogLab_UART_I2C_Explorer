@@ -27,30 +27,26 @@
 #define BUTTON_PIN_B 6
 
 // Variáveis globais
-static volatile uint8_t numero_atual = 0;  // Número exibido na matriz de LED
-static volatile uint32_t last_time = 0;    // Tempo do último evento para debounce
+static volatile bool led_green_state = false;
+static volatile bool led_blue_state = false;
 
-// Prototipação
+// Prototipagem
 static void gpio_irq_handler(uint gpio, uint32_t events);
 void init_uart(void);
 void init_gpio(void);
 void init_display(ssd1306_t *ssd);
+void process_serial_input(ssd1306_t *ssd, char input);
 
-// Função de interrupção com debounce e detecção de botão
+// Função de interrupção para os botões
 void gpio_irq_handler(uint gpio, uint32_t events) {
-    uint32_t current_time = to_us_since_boot(get_absolute_time());
-
-    if (current_time - last_time > 200000) { // Debounce de 200ms
-        last_time = current_time;
-
-        if (gpio == BUTTON_PIN_A) {
-            numero_atual = (numero_atual + 1) % 10; // Incrementa
-        } else if (gpio == BUTTON_PIN_B) {
-            numero_atual = (numero_atual + 9) % 10; // Decrementa (circular)
-        }
-
-        printf("Número exibido: %d\n", numero_atual);
-        led_matrix_display_number(numero_atual);
+    if (gpio == BUTTON_PIN_A) {
+        led_green_state = !led_green_state;
+        gpio_put(LED_PIN_G, led_green_state);
+        printf("LED Verde %s\n", led_green_state ? "Ligado" : "Desligado");
+    } else if (gpio == BUTTON_PIN_B) {
+        led_blue_state = !led_blue_state;
+        gpio_put(LED_PIN_B, led_blue_state);
+        printf("LED Azul %s\n", led_blue_state ? "Ligado" : "Desligado");
     }
 }
 
@@ -64,8 +60,13 @@ void init_uart(void) {
 
 // Inicializa GPIOs
 void init_gpio(void) {
-    gpio_init(LED_PIN_R);
-    gpio_set_dir(LED_PIN_R, GPIO_OUT);
+    gpio_init(LED_PIN_G);
+    gpio_set_dir(LED_PIN_G, GPIO_OUT);
+    gpio_put(LED_PIN_G, 0);
+
+    gpio_init(LED_PIN_B);
+    gpio_set_dir(LED_PIN_B, GPIO_OUT);
+    gpio_put(LED_PIN_B, 0);
 
     gpio_init(BUTTON_PIN_A);
     gpio_set_dir(BUTTON_PIN_A, GPIO_IN);
@@ -90,38 +91,43 @@ void init_display(ssd1306_t *ssd) {
     ssd1306_init(ssd, WIDTH, HEIGHT, false, ENDERECO, I2C_PORT);
     ssd1306_config(ssd);
     ssd1306_fill(ssd, false);
+    ssd1306_draw_string(ssd, "Caractere:", 8, 0);
     ssd1306_send_data(ssd);
+}
+
+// Processa entrada serial e exibe no display
+void process_serial_input(ssd1306_t *ssd, char input) {
+    char text[2] = {input, '\0'};
+    ssd1306_fill(ssd, false);
+    ssd1306_draw_string(ssd, "Caractere:", 8, 0);
+    ssd1306_draw_string(ssd, text, 8, 10);
+    ssd1306_send_data(ssd);
+    printf("Caractere recebido: %c\n", input);
+
+    if (input >= '0' && input <= '9') {
+        int numero = input - '0';
+        led_matrix_display_number(numero);
+    }
 }
 
 // Função Principal
 int main() {
     init_uart();
     init_gpio();
-
+    
     ssd1306_t ssd;
     init_display(&ssd);
     led_matrix_init();
-
-    printf("Sistema iniciado. Pressione os botões para alterar os números.\n");
-
-    // Exibir número inicial
-    led_matrix_display_number(numero_atual);
-
-    bool cor = true;
-    while (true) {
-        cor = !cor;
-        // Atualiza o conteúdo do display com animações
-        ssd1306_fill(&ssd, !cor); // Limpa o display
-        ssd1306_rect(&ssd, 3, 3, 122, 58, cor, !cor); // Desenha um retângulo
-        ssd1306_draw_string(&ssd, "Cepedi   TIC37", 8, 10); // Desenha uma string
-        ssd1306_draw_string(&ssd, "EMBARCATECH", 20, 30); // Desenha uma string
-        ssd1306_draw_string(&ssd, "PROF WILTON", 15, 48); // Desenha uma string      
-        ssd1306_send_data(&ssd); // Atualiza o display
     
-        sleep_ms(1000);
-
-        sleep_ms(50);
+    printf("Sistema iniciado. Digite caracteres para exibi-los no display.\n");
+    
+    while (true) {
+        if (uart_is_readable(UART_ID)) {
+            char c = uart_getc(UART_ID);
+            process_serial_input(&ssd, c);
+        }
+        sleep_ms(100);
     }
-
+    
     return 0;
 }
