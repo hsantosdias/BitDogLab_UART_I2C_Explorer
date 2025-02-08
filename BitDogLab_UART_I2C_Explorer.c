@@ -45,17 +45,22 @@ void gpio_irq_handler(uint gpio, uint32_t events)
 
 
 
+
+/*
+
+
+//codigo para teste de UART e GPIO com interrupção de botão e envio de mensagem pela UART 
 int main()
 {
     // Inicializa a biblioteca padrão
     stdio_init_all();
-/*     Inicializa a UART com o padrão: ( 115200, 8N1)
-*    115200: A taxa de transmissão de dados.
-*    8: O número de bits de dados por caractere (neste caso, 8 bits).
-*    N: Não há bit de paridade (No parity).
-*    1: O número de bits de parada (neste caso, 1 bit).
-*    Low bit first: A ordem dos bits é do bit menos significativo para o mais significativo.
-*/
+//     Inicializa a UART com o padrão: ( 115200, 8N1)
+//    115200: A taxa de transmissão de dados.
+//    8: O número de bits de dados por caractere (neste caso, 8 bits).
+//    N: Não há bit de paridade (No parity).
+//    1: O número de bits de parada (neste caso, 1 bit).
+//    Low bit first: A ordem dos bits é do bit menos significativo para o mais significativo.
+
     uart_init(UART_ID, BAUD_RATE);
 
     // Configura os pinos GPIO para a UART
@@ -102,7 +107,11 @@ int main()
     return 0;
 }
 
+*/
+
 /*
+//Codigo para teste do display OLED
+
 int main()
 {
   stdio_init_all(); // Inicializa a UART para debug
