@@ -37,8 +37,9 @@ static void gpio_irq_handler(uint gpio, uint32_t events);
 void init_uart(void);
 void init_gpio(void);
 void init_display(void);
-void atualizar_display(const char *mensagem);
+void atualizar_display(const char *linha1, const char *linha2);
 void processar_uart(void);
+void desligar_matrix(void);
 
 // Função de interrupção com debounce e detecção de botão
 void gpio_irq_handler(uint gpio, uint32_t events) {
@@ -52,13 +53,13 @@ void gpio_irq_handler(uint gpio, uint32_t events) {
             estado_led_verde = !estado_led_verde;
             gpio_put(LED_PIN_G, estado_led_verde);
             printf("Botão A pressionado: LED Verde %s\n", estado_led_verde ? "Ligado" : "Desligado");
-            atualizar_display(estado_led_verde ? "LED Verde Ligado" : "LED Verde Desligado");
+            atualizar_display(estado_led_verde ? "LED Verde Ligado" : "LED Verde Desligado", "");
         } 
         else if (gpio == BUTTON_PIN_B) {
             estado_led_azul = !estado_led_azul;
             gpio_put(LED_PIN_B, estado_led_azul);
             printf("Botão B pressionado: LED Azul %s\n", estado_led_azul ? "Ligado" : "Desligado");
-            atualizar_display(estado_led_azul ? "LED Azul Ligado" : "LED Azul Desligado");
+            atualizar_display(estado_led_azul ? "LED Azul Ligado" : "LED Azul Desligado", "");
         }
     }
 }
@@ -112,12 +113,21 @@ void init_display(void) {
     ssd1306_send_data(&ssd);
 }
 
-// Atualiza o display com uma mensagem
-void atualizar_display(const char *mensagem) {
-    printf("Atualizando display: %s\n", mensagem);  // Debug print
+// Atualiza o display com duas mensagens (duas linhas)
+void atualizar_display(const char *linha1, const char *linha2) {
+    printf("Atualizando display: %s | %s\n", linha1, linha2);
     ssd1306_fill(&ssd, false); // Limpa o display
-    ssd1306_draw_string(&ssd, mensagem, 10, 25); // Escreve a mensagem no display
+    ssd1306_draw_string(&ssd, linha1, 10, 10); // Primeira linha no topo
+    ssd1306_draw_string(&ssd, linha2, 10, 30); // Segunda linha abaixo
     ssd1306_send_data(&ssd);
+}
+
+// Desliga a matriz 5x5 e exibe mensagem
+void desligar_matrix(void) {
+    led_matrix_clear();  // Limpa todos os LEDs da matriz
+    led_matrix_write();  // Atualiza a matriz para garantir que os LEDs sejam apagados
+    atualizar_display("Matrix 5x5 off", ""); // Mostra apenas a mensagem de desligamento
+    printf("Matrix 5x5 desligada\n");
 }
 
 // Processa entrada via UART
@@ -127,11 +137,12 @@ void processar_uart(void) {
         if (scanf("%c", &recebido) == 1) {  // Lê caractere da entrada padrão
             printf("Recebido via UART: %c\n", recebido);
 
-            // Se for uma letra, exibe no display
+            // Se for uma letra, exibe no display e desliga a matriz
             if ((recebido >= 'A' && recebido <= 'Z') || (recebido >= 'a' && recebido <= 'z')) {
                 char mensagem[20];
                 snprintf(mensagem, sizeof(mensagem), "Letra: %c", recebido);
-                atualizar_display(mensagem);
+                desligar_matrix();  // Desliga a matriz
+                atualizar_display("Matrix 5x5 off", mensagem); // Primeira linha "Matrix 5x5 off", segunda linha mostra a letra
                 printf("Letra recebida e enviada ao OLED: %c\n", recebido);
             } 
             // Se for um número, exibe na matriz de LEDs
@@ -141,7 +152,12 @@ void processar_uart(void) {
                 led_matrix_display_number(numero);
                 char mensagem[20];
                 snprintf(mensagem, sizeof(mensagem), "Número: %d", numero);
-                atualizar_display(mensagem);
+                atualizar_display("", mensagem); // Apenas exibe o número, sem "Matrix 5x5 off"
+            }
+            // Se for qualquer outro caractere especial, também desliga a matriz
+            else {
+                desligar_matrix();
+                atualizar_display("Matrix 5x5 off", ""); // Apenas exibe que a matriz foi desligada
             }
         }
     }
