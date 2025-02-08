@@ -1,4 +1,3 @@
-
 # BitDogLab_UART_I2C_Explorer
 
 Projeto para explorar a comunicação UART e I2C com o RP2040 na placa BitDogLab.
@@ -91,6 +90,7 @@ O sistema aceita alguns comandos especiais enviados pelo terminal UART:
 
 O fluxograma abaixo representa o funcionamento do código principal:
 
-**Fluxograma do projeto**
+**Fluxograma simplificado do projeto**
+
 
 Este fluxograma mostra a estrutura básica do código principal, incluindo inicializações e o loop principal de execução.
