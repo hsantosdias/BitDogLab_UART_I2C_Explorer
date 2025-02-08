@@ -92,5 +92,30 @@ O fluxograma abaixo representa o funcionamento do código principal:
 
 **Fluxograma simplificado do projeto**
 
-
 Este fluxograma mostra a estrutura básica do código principal, incluindo inicializações e o loop principal de execução.
+
+[![Fluxograma Simplificado](imgs/fluxograma-simplificado.png "Fluxograma Simplificado")](https://github.com/hsantosdias/BitDogLab_UART_I2C_Explorer/blob/main/imgs/fluxograma-simplificado.png?raw=true "Fluxograma Simplificado")
+
+[![Flugrama de interações entre as funções](imgs/fluxograma-completo.png "Flugrama de interações entre as funções")](https://github.com/hsantosdias/BitDogLab_UART_I2C_Explorer/blob/main/imgs/fluxograma-completo.png?raw=true "Flugrama de interações entre as funções")
+
+
+### **Descrição Simplificada do Fluxograma**
+
+O fluxograma representa o funcionamento do sistema, desde a inicialização até a interação com os componentes.
+
+1. **Inicialização**
+   * O sistema é ligado e inicializa  **UART** ,  **GPIOs** , **Display OLED** e  **Matriz de LED 5x5** .
+   * Após a inicialização, entra no  **loop principal** .
+2. **Entrada via UART (Teclado do PC)**
+   * Se houver entrada via  **UART** , o sistema processa o caractere digitado.
+   * Se for uma  **letra** , ela é exibida no **OLED** e a  **matriz de LED é desligada** .
+   * Se for um  **número (0-9)** , ele é exibido na  **matriz de LED** .
+3. **Interação com os Botões**
+   * Se um botão for pressionado:
+     * **Botão A:** Alterna o estado do **LED Verde** e exibe a mudança no  **OLED** .
+     * **Botão B:** Alterna o estado do **LED Azul** e exibe a mudança no  **OLED** .
+   * Se nenhum botão for pressionado, o sistema continua aguardando.
+4. **Ciclo Contínuo**
+   * Após processar  **UART ou Botões** , o sistema espera **50ms** antes de continuar o loop.
+
+**Resumo:** O sistema lê entradas do teclado (UART) e exibe caracteres no OLED e números na matriz 5x5. Ele também responde aos botões alternando LEDs e exibindo o status no display.
