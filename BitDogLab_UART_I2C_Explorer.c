@@ -69,6 +69,10 @@ void init_uart(void) {
     uart_init(UART_ID, BAUD_RATE);
     gpio_set_function(UART_TX_PIN, GPIO_FUNC_UART);
     gpio_set_function(UART_RX_PIN, GPIO_FUNC_UART);
+    uart_set_hw_flow(UART_ID, false, false);  // Desativa controle de fluxo
+    uart_set_format(UART_ID, 8, 1, UART_PARITY_NONE);
+    uart_set_fifo_enabled(UART_ID, false);
+    printf("UART Inicializada com sucesso\n");
 }
 
 // Inicializa GPIOs
@@ -116,23 +120,28 @@ void atualizar_display(const char *mensagem) {
     ssd1306_send_data(&ssd);
 }
 
+if (uart_is_readable(UART_ID)) {
 // Processa entrada via UART
 void processar_uart(void) {
     if (uart_is_readable(UART_ID)) {
         char recebido = uart_getc(UART_ID);
+        printf("Recebido via UART: %c\n", recebido);
 
         // Se for uma letra, exibe no display
         if ((recebido >= 'A' && recebido <= 'Z') || (recebido >= 'a' && recebido <= 'z')) {
             char mensagem[20];
             snprintf(mensagem, sizeof(mensagem), "Letra: %c", recebido);
             atualizar_display(mensagem);
-            printf("Letra recebida via UART: %c\n", recebido);
-        }
+            printf("Letra recebida e enviada ao OLED: %c\n", recebido);
+        } 
         // Se for um número, exibe na matriz de LEDs
         else if (recebido >= '0' && recebido <= '9') {
             int numero = recebido - '0';
             printf("Número recebido via UART: %d\n", numero);
             led_matrix_display_number(numero);
+            char mensagem[20];
+            snprintf(mensagem, sizeof(mensagem), "Número: %d", numero);
+            atualizar_display(mensagem);
         }
     }
 }
