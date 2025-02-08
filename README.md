@@ -92,12 +92,14 @@ O fluxograma abaixo representa o funcionamento do código principal:
 
 **Fluxograma simplificado do projeto**
 
-Este fluxograma mostra a estrutura básica do código principal, incluindo inicializações e o loop principal de execução.
 
 [![Fluxograma Simplificado](imgs/fluxograma-simplificado.png "Fluxograma Simplificado")](https://github.com/hsantosdias/BitDogLab_UART_I2C_Explorer/blob/main/imgs/fluxograma-simplificado.png?raw=true "Fluxograma Simplificado")
 
-[![Flugrama de interações entre as funções](imgs/fluxograma-completo.png "Flugrama de interações entre as funções")](https://github.com/hsantosdias/BitDogLab_UART_I2C_Explorer/blob/main/imgs/fluxograma-completo.png?raw=true "Flugrama de interações entre as funções")
+*Este fluxograma mostra a estrutura básica do código principal, incluindo inicializações e o loop principal de execução.*
 
+**Fluxograma completo do projeto**
+
+[![Flugrama de interações entre as funções](imgs/fluxograma-completo.png "Flugrama de interações entre as funções")](https://github.com/hsantosdias/BitDogLab_UART_I2C_Explorer/blob/main/imgs/fluxograma-completo.png?raw=true "Flugrama de interações entre as funções")
 
 ### **Descrição Simplificada do Fluxograma**
 
