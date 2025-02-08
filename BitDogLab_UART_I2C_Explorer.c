@@ -40,19 +40,22 @@ void init_display(ssd1306_t *ssd);
 void gpio_irq_handler(uint gpio, uint32_t events) {
     uint32_t current_time = to_us_since_boot(get_absolute_time());
 
-    if (current_time - last_time > 200000) { // Debounce de 200ms
-        last_time = current_time;
+    if (current_time - last_time < 200000) return; // Evita múltiplas chamadas em menos de 200ms
 
-        if (gpio == BUTTON_PIN_A) {
-            numero_atual = (numero_atual + 1) % 10; // Incrementa
-        } else if (gpio == BUTTON_PIN_B) {
-            numero_atual = (numero_atual + 9) % 10; // Decrementa (circular)
-        }
+    last_time = current_time;
 
-        printf("Número exibido: %d\n", numero_atual);
-        led_matrix_display_number(numero_atual);
+    if (gpio == BUTTON_PIN_A) {
+        numero_atual = (numero_atual + 1) % 10; // Incrementa
+    } else if (gpio == BUTTON_PIN_B) {
+        numero_atual = (numero_atual + 9) % 10; // Decrementa (circular)
     }
+
+    printf("[EVENTO] Botão %s pressionado. Novo número: %d\n", 
+        gpio == BUTTON_PIN_A ? "A (+)" : "B (-)", 
+        numero_atual);
+ 
 }
+
 
 // Inicializa UART
 void init_uart(void) {
