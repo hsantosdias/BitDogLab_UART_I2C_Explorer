@@ -44,6 +44,8 @@ pico_set_program_version(BitDogLab_UART_I2C_Explorer "0.1")
 pico_enable_stdio_uart(BitDogLab_UART_I2C_Explorer 0)
 pico_enable_stdio_usb(BitDogLab_UART_I2C_Explorer 1)
 
+pico_generate_pio_header(BitDogLab_UART_I2C_Explorer ${CMAKE_CURRENT_LIST_DIR}/ws2812b.pio)
+
 # Add the standard library to the build
 target_link_libraries(BitDogLab_UART_I2C_Explorer
         pico_stdlib hardware_uart hardware_i2c)
