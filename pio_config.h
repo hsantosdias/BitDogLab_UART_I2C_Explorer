@@ -1,11 +1,11 @@
 #include <stdio.h>
-#include "pico/stdlib.h"
-#include "hardware/gpio.h"
-#include "hardware/clocks.h"
+#include "pico/stdlib.h" // Inclui a biblioteca de funções padrão
+#include "hardware/gpio.h" // Inclui a biblioteca de GPIO
+#include "hardware/clocks.h" // Inclui a biblioteca de clocks
 
-#include "ws2812b.pio.h"
+#include "ws2812b.pio.h" // Inclui o arquivo gerado pelo compilador PIO
 
-#define LED_COUNT 25
+#define LED_COUNT 25 // Número de LEDs na matriz de LEDs (5x5)
 
 // Definição de pixel GRB
 // Cada pixel é composto por 3 bytes, um para cada cor 24bits
