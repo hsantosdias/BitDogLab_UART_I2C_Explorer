@@ -100,6 +100,38 @@ void init_display(ssd1306_t *ssd) {
 
 
 
+int main() {
+    init_uart();
+    init_gpio();
+    
+    ssd1306_t ssd;
+    init_display(&ssd);
+
+    while (1)
+    {
+        // Verifica se a flag está ativa
+        if (flag_var)
+        {
+            // Cria a mensagem com o valor atual do contador
+            char message[50];
+            sprintf(message, "Contagem: %d\n", counter);
+
+            // Envia a mensagem pela UART
+            uart_puts(UART_ID, message);
+            //            printf("Mensagem enviada: %s", message); // Exibe a mensagem no serial monitor
+
+            // Pisca o LED
+            gpio_put(LED_PIN_R, 1);
+            sleep_ms(50);
+            gpio_put(LED_PIN_R, 0);
+            sleep_ms(50);
+            flag_var = 0; // Limpa a flag de interrupção
+        }
+
+        // Pequeno atraso para evitar sobrecarga no loop principal
+        sleep_ms(10);
+    }
+}
 
 
 /*
