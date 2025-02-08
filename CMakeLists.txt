@@ -35,7 +35,7 @@ pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
 
-add_executable(BitDogLab_UART_I2C_Explorer BitDogLab_UART_I2C_Explorer.c inc/ssd1306.c)
+add_executable(BitDogLab_UART_I2C_Explorer BitDogLab_UART_I2C_Explorer.c inc/ssd1306.c led_matrix.c)
 
 pico_set_program_name(BitDogLab_UART_I2C_Explorer "BitDogLab_UART_I2C_Explorer")
 pico_set_program_version(BitDogLab_UART_I2C_Explorer "0.1")
@@ -59,6 +59,7 @@ target_include_directories(BitDogLab_UART_I2C_Explorer PRIVATE
 # Add any user requested libraries
 target_link_libraries(BitDogLab_UART_I2C_Explorer 
         hardware_i2c
+        hardware_pio
         )
 
 pico_add_extra_outputs(BitDogLab_UART_I2C_Explorer)
