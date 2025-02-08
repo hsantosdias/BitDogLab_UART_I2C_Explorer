@@ -5,43 +5,99 @@
 #include "inc/ssd1306.h"
 #include "inc/font.h"
 #include "hardware/irq.h"
+
 // Definições do display SSD1306 128x64 I2C OLED 
 #define I2C_PORT i2c1
 #define I2C_SDA 14
 #define I2C_SCL 15
-#define endereco 0x3C
-//Definições para uart 
+#define ENDERECO 0x3C
+
+// Definições para UART 
 #define UART_ID uart0    // Seleciona a UART0
-#define BAUD_RATE 115200 // Define a taxa de transmissão
-#define UART_TX_PIN 0    // Pino GPIO usado para TX
-#define UART_RX_PIN 1    // Pino GPIO usado para RX
-#define LED_PIN_R 13       // Pino GPIO usado para o LED Vermelho
-#define LED_PIN_B 12       // Pino GPIO usado para o LED Azul
-#define LED_PIN_G 11       // Pino GPIO usado para o LED Verde
-#define BUTTON_PIN_A 5    // Pino GPIO usado para o botão A
-#define BUTTON_PIN_B 6    // Pino GPIO usado para o botão B
+#define BAUD_RATE 115200 // Taxa de transmissão
+#define UART_TX_PIN 0    // Pino TX
+#define UART_RX_PIN 1    // Pino RX
+
+// Definições para LEDs e botões
+#define LED_PIN_R 13     // LED Vermelho
+#define LED_PIN_B 12     // LED Azul
+#define LED_PIN_G 11     // LED Verde
+#define BUTTON_PIN_A 5   // Botão A
+#define BUTTON_PIN_B 6   // Botão B
 
 // Variáveis globais
-static volatile uint16_t counter = 0;   // Variável inteira para contagem
-static volatile uint32_t last_time = 0; // Armazena o tempo do último evento (em microssegundos)
-static volatile bool flag_var = 0;      // Variável de flag para debouncing
+static volatile uint16_t counter = 0;   // Contador de eventos do botão
+static volatile uint32_t last_time = 0; // Tempo do último evento para debounce
+static volatile bool flag_var = false;  // Flag de atualização do contador
 
-// Prototipação da função de interrupção
+// Prototipação das funções
 static void gpio_irq_handler(uint gpio, uint32_t events);
+void init_uart(void);
+void init_gpio(void);
+void init_display(ssd1306_t *ssd);
 
 // Função de interrupção com debouncing
-void gpio_irq_handler(uint gpio, uint32_t events)
-{
-    // Obtém o tempo atual em microssegundos
+void gpio_irq_handler(uint gpio, uint32_t events) {
     uint32_t current_time = to_us_since_boot(get_absolute_time());
-    // Verifica se passou tempo suficiente desde o último evento
-    if (current_time - last_time > 200000) // 50 ms de debouncing
-    {
-        last_time = current_time; // Atualiza o tempo do último evento
-        counter++;                // Incrementa o contador
-        flag_var = 1;
+
+    // Verifica debounce (50ms)
+    if (current_time - last_time > 50000) {
+        last_time = current_time;
+        counter++;
+        flag_var = true;  // Define a flag para atualização
     }
 }
+
+// Inicialização da UART
+void init_uart(void) {
+    stdio_init_all();
+    uart_init(UART_ID, BAUD_RATE);
+    gpio_set_function(UART_TX_PIN, GPIO_FUNC_UART);
+    gpio_set_function(UART_RX_PIN, GPIO_FUNC_UART);
+}
+
+// Inicialização de GPIOs (LEDs e botões)
+void init_gpio(void) {
+    // Configura LEDs
+    gpio_init(LED_PIN_R);
+    gpio_set_dir(LED_PIN_R, GPIO_OUT);
+
+    gpio_init(LED_PIN_B);
+    gpio_set_dir(LED_PIN_B, GPIO_OUT);
+
+    gpio_init(LED_PIN_G);
+    gpio_set_dir(LED_PIN_G, GPIO_OUT);
+
+    // Configura Botões
+    gpio_init(BUTTON_PIN_A);
+    gpio_set_dir(BUTTON_PIN_A, GPIO_IN);
+    gpio_pull_up(BUTTON_PIN_A);
+
+    gpio_init(BUTTON_PIN_B);
+    gpio_set_dir(BUTTON_PIN_B, GPIO_IN);
+    gpio_pull_up(BUTTON_PIN_B);
+
+    // Configuração da interrupção para o botão A
+    gpio_set_irq_enabled_with_callback(BUTTON_PIN_A, GPIO_IRQ_EDGE_FALL, true, &gpio_irq_handler);
+}
+
+// Inicialização do display SSD1306
+void init_display(ssd1306_t *ssd) {
+    // Configura I2C
+    i2c_init(I2C_PORT, 400 * 1000);
+    gpio_set_function(I2C_SDA, GPIO_FUNC_I2C);
+    gpio_set_function(I2C_SCL, GPIO_FUNC_I2C);
+    gpio_pull_up(I2C_SDA);
+    gpio_pull_up(I2C_SCL);
+
+    // Inicializa o display
+    ssd1306_init(ssd, WIDTH, HEIGHT, false, ENDERECO, I2C_PORT);
+    ssd1306_config(ssd);
+    ssd1306_fill(ssd, false);
+    ssd1306_send_data(ssd);
+}
+
+
 
 
 
@@ -142,7 +198,7 @@ int main()
   gpio_pull_up(I2C_SDA); // Pull up the data line
   gpio_pull_up(I2C_SCL); // Pull up the clock line
   ssd1306_t ssd; // Inicializa a estrutura do display
-  ssd1306_init(&ssd, WIDTH, HEIGHT, false, endereco, I2C_PORT); // Inicializa o display
+  ssd1306_init(&ssd, WIDTH, HEIGHT, false, ENDERECO, I2C_PORT); // Inicializa o display
   ssd1306_config(&ssd); // Configura o display
   ssd1306_send_data(&ssd); // Envia os dados para o display
 
