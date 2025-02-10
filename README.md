@@ -2,6 +2,10 @@
 
 Projeto para explorar a comunicação **UART** e **I2C** no RP2040 usando a placa  **BitDogLab** .
 
+**Neste Link podemos ver o projeto em funcionamento**
+
+[Video demonstrando o projeto em funcinamento](https://drive.google.com/file/d/1UZyQRJvS3QPvmATnKgrbYrRIIzEfmnLF/view?usp=sharing "Video demonstrando o projeto em funcinamento")
+
 O projeto implementa:
 
 * Controle de LEDs RGB e matriz de LEDs WS2812.
